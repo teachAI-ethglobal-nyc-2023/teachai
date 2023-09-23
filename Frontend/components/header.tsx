@@ -6,7 +6,6 @@ import Container from "./container";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "../components/ui/sheet";
 import { Menu, Moon, Sun } from "lucide-react";
-//import ProfileButton from "./ui/ProfileButton";
 
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from "wagmi";
