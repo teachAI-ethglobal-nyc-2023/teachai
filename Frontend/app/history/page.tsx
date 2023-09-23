@@ -7,15 +7,44 @@ import Head from 'next/head';
 import { useAccount } from "wagmi";
 import { useState, useEffect } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+  } from "@/components/ui/table";  
+
+import {
+    SimpleTable, 
+    // sampleInvoices,
+    sampleResponses,
+} from "@/components/simple-table";
 
 const History: NextPage = () => {
 
   const [isClient, setIsClient] = useState(false);
+  const [tableInput, setTableInput] = useState(
+    sampleResponses
+  );
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  const addInvoice = () => {
+    // Create a new invoice and add it to the invoices state
+    const newRow = {
+      model: `0x${tableInput.length + 1}`,
+      prompt: 'how do we move forward',
+      betterResponse: 'by looking backward',
+      worseResponse: 'by building more robots',
+    };
+
+    setTableInput((prevInvoices) => [...prevInvoices, newRow]);
+  };
 
   return (
     <div>
@@ -29,9 +58,8 @@ const History: NextPage = () => {
       </Head>
 
       <main>
-
-        <h1>History</h1>
-        
+        <button onClick={addInvoice}>Add Row</button>
+        <SimpleTable tableInput={tableInput} />
       </main>
 
     </div>
