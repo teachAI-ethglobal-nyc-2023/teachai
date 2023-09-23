@@ -49,6 +49,7 @@ export function handleLogPrompt(event: logPromp): void {
      * logPrompt (
      * bytes indexed model, # IPFS hash of the model
      * string indexed prompt, # String of the prompt
+     * address indexed user, # the user making the prompt request
      * )
      */
 
