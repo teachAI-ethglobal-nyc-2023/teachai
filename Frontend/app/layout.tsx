@@ -6,6 +6,7 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from "@/components/theme-provider"
 
 import { Providers } from './providers';
+import Header from "../components/header";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -31,6 +32,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Providers>
+            <Header />
             {children}
           </Providers>
         </ThemeProvider>
