@@ -6,6 +6,22 @@
 
 `updateModel`: we need a way to pass in a value that specifies which model is being used to server inferences. assuming the model is on cartesi, this can be a `voucher` that is emitted after a model tuning occurs. if we run the model on a remote server, this could possibly be the cid indicating where the weights are stored on `IPFS`. regardless, we need a simple way to indicate what model is being used by the contract. 
 
+function(s): 
+
+```sol
+function updateModel(
+    string model, 
+    address owner, 
+    string title
+) {
+
+    // update global params 
+    model = model
+    ...
+
+}
+```
+
 event(s): 
 
 ```sol
@@ -17,6 +33,20 @@ event(s):
 ```
 
 `setRate`: we need a way to set the cost per prompt for the model. ideally, this will also specify the ERC20 that is being accepted for the prompts. 
+
+function(s): 
+
+```sol
+function setRate(
+    uint rate, 
+    address asset, 
+) {
+
+    // update global params 
+    rate = rate
+    ...
+}
+```
 
 event(s): 
 
@@ -35,6 +65,25 @@ Nice-to-Have(s):
 
 `userPrompt`: we need a way to allow the user to pass data to the model as a prompt. when the user supplies the prompt, they will also make a payment (specified by `setRate`). 
 
+function(s): 
+
+```sol
+function userPrompt(
+    string prompt, 
+    address asset, 
+) {
+
+    // require user payment at set rate 
+    
+    // emit data
+    emit logPrompt(
+        model, 
+        prompt, 
+        msg.sender
+    )
+}
+```
+
 event(s): 
 
 ```sol
@@ -47,6 +96,23 @@ event(s):
 
 `createInference`: we need a way to return text predictions given a successful prompt. to map prompts to inferences, we can require the responsder to pass in the transaction hash associated with the initial prompt that it is responding to. 
 
+function(s): 
+
+```sol
+function createInference(
+    string promptTx, 
+    string textOne, 
+    string textTwo
+) {
+
+    emit logInference(
+        promptTx, 
+        textOne, 
+        textTwo
+    )
+}
+```
+
 event(s): 
 
 ```sol
@@ -58,6 +124,19 @@ event(s):
 ```
 
 `inferenceFeedback`: we need a way to allow the user to provide feedback to a given inference. to map the inference to feedback, we can simply require the user providing feedback to provide the transaction hash of the inference. 
+
+```sol
+function inferenceFeedback(
+    string inferenceTx, 
+    bool isOneBetter,
+) {
+
+    emit logFeedback(
+        inferenceTx, 
+        isOneBetter, 
+    )
+}
+```
 
 event(s): 
 
