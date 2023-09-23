@@ -1,0 +1,37 @@
+specVersion: 0.0.5
+description: a subgraph to support the teachai protocol
+repository: https://github.com/teachAI-ethglobal-nyc-2023/teachai
+schema: 
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: TeachAI
+    network: {{ network }}
+    source: 
+      address: '{{ teachai-address }}'
+      abi: TeachAI
+      startBlock: {{ startBlock }}
+    mapping: 
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/mappings/TeachAI.ts
+      entities: 
+        - User
+        - Transaction 
+        - Model
+        - Prompt
+        - Inference
+        - Feedback
+      abis:
+        - name: TeachAI
+          file: ./abis/TeachAI.json
+      eventHandlers: 
+        - event: logModel
+          handler: handleLogModel
+        - event: logPrompt
+          handler: handleLogPrompt
+        - event: logInference
+          handler: handleLogInference
+        - event: logFeedback
+          handler: handleLogFeedback

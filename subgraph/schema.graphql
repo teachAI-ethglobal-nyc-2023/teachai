@@ -1,0 +1,103 @@
+type User @entity {
+    " the address of the user "
+    id: Bytes!
+    " the number of requests the user has made "
+    inferenceCount: BigInt!
+    " the number of feedbacks the user has made "
+    feedbackCount: BigInt!
+    " the prompts the user has made "
+    prompt: [Prompt!]! @derivedFrom(field: "user")
+    " the inferences the user has received "
+    inference: [Inference!]! @derivedFrom(field: "user")
+    " the feedbacks the user has made "
+    feedback: [Feedback!]! @derivedFrom(field: "user")
+    " the models the user has used "
+    model: [Model!]! @derivedFrom(field: "user")
+}
+
+type Transaction @entity(immutable: true) {
+    " the transaction hash "
+    id: Bytes!
+    " the transaction timestamp "
+    timestamp: BigInt!
+    " the transaction block number "
+    blockNumber: BigInt!
+    " the transaction block index "
+    blockIndex: BigInt!
+}
+
+type Model @entity(immutable: true) {
+    " the IPFS hash that the model is stored at "
+    id: Bytes!
+    " the transaction entity "
+    transaction: Transaction!
+    " the event index "
+    eventIndex: BigInt!
+    " the title of the model TODO: this will most likely be removed, as loading the model json would be a large given the weights would be loaded "
+    title: String!
+    " the user that assigned the contract to the model "
+    user: User!
+    " the number of inferences the model has made "
+    inferenceCount: BigInt!
+    " the number of feedbacks the model has received "
+    feedbackCount: BigInt!
+    " the inferences the model has made "
+    inference: [Inference!]! @derivedFrom(field: "model")
+    " the feedbacks the model has received "
+    feedback: [Feedback!]! @derivedFrom(field: "model")
+}
+
+type Prompt @entity(immutable: true) {
+    " the transactions hash "
+    id: Bytes!
+    " the transaction entity "
+    transaction: Transaction!
+    " the event index "
+    eventIndex: BigInt!
+    " the model that the prompt was sent to "
+    model: Model!
+    " the user that submitted the prompt "
+    user: User!
+    " the text that was sent to the model "
+    text: String!
+    " the inference that was made from the prompt "
+    inference: Inference
+    " the feedback that was made from the inference "
+    feedback: Feedback
+}
+
+type Inference @entity(immutable: true) {
+    " the transactions hash "
+    id: Bytes!
+    " the transaction entity "
+    transaction: Transaction!
+    " the event index "
+    eventIndex: BigInt!
+    " the model that made the inference "
+    model: Model!
+    " the user that made the inference "
+    user: User!
+    " the text that was inferred "
+    textOne: String!
+    " the text that was inferred "
+    textTwo: String!
+}
+
+type Feedback @entity(immutable: true) {
+    " the transaction hash "
+    id: Bytes!
+    " the transaction entity "
+    transaction: Transaction!
+    " the event index "
+    eventIndex: BigInt!
+    " the model that received the feedback "
+    model: Model!
+    " the user that made the feedback "
+    user: User!
+    " the prompt that was sent to the model "
+    prompt: Prompt!
+    " the inference that was made from the prompt "
+    inference: Inference!
+    " the feedback that was made from the inference "
+    isOneBetter: Boolean!
+}
