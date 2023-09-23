@@ -7,15 +7,43 @@ import Head from 'next/head';
 import { useAccount } from "wagmi";
 import { useState, useEffect } from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+  } from "@/components/ui/table";  
+
+import {
+    SimpleTable, 
+    sampleInvoices,
+} from "@/components/simple-table";
 
 const History: NextPage = () => {
 
   const [isClient, setIsClient] = useState(false);
+  const [invoices, setInvoices] = useState(
+    sampleInvoices
+  );
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  const addInvoice = () => {
+    // Create a new invoice and add it to the invoices state
+    const newInvoice = {
+      invoice: `INV00${invoices.length + 1}`,
+      paymentStatus: 'Pending',
+      totalAmount: '$100.00',
+      paymentMethod: 'Credit Card',
+    };
+
+    setInvoices((prevInvoices) => [...prevInvoices, newInvoice]);
+  };
 
   return (
     <div>
@@ -29,9 +57,8 @@ const History: NextPage = () => {
       </Head>
 
       <main>
-
-        <h1>History</h1>
-        
+        <button onClick={addInvoice}>Add Invoice</button>
+        <SimpleTable invoices={invoices} />
       </main>
 
     </div>
