@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "llm-data"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "llm_data"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+subgrounds = "^1.7.1"
+
+
+[tool.poetry.group.dev.dependencies]
+jupyter = "^1.0.0"
+ipykernel = "^6.25.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
