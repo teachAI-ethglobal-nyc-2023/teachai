@@ -74,3 +74,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+userAvatar {
+  border-radius: 50%;
+  background-color: grey;
+  height: 48px;
+  width: 48px;
+};

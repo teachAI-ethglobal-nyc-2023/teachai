@@ -11,10 +11,17 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from "wagmi";
 import { useState, useEffect } from 'react'
 
+import Gravatar from "react-gravatar";
+
 const Header = () => {
   const { theme, setTheme } = useTheme();
   const { isConnected, address } = useAccount();
-  const [isClient, setIsClient] = useState(false)
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
     <header className="sm:flex sm:justify-between py-4 px-4 border-b">
@@ -32,6 +39,9 @@ const Header = () => {
                     </Link>
                     <Link href="/history" className="block px-2 py-1 text-lg">
                       History
+                    </Link>
+                    <Link href="/profile" className="block px-2 py-1 text-lg">
+                      Profile
                     </Link>
                 </nav>
               </SheetContent>
@@ -51,6 +61,11 @@ const Header = () => {
                     History
                 </Link>
             </Button>
+            <Button asChild variant="ghost">
+                <Link href="/profile" className="text-sm font-medium transition-colors">
+                    Profile
+                </Link>
+            </Button>
           </nav>
           <div className="flex items-center">
             <Button
@@ -67,7 +82,9 @@ const Header = () => {
             <ConnectButton label="Sign In"/>
 
             {(isClient && isConnected) && (
-              <></>
+              <>
+                <Gravatar email={address} className="mx-4 rounded-3xl" />
+              </>
             )}
 
 
