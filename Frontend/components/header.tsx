@@ -40,8 +40,8 @@ const Header = () => {
                     <Link href="/history" className="block px-2 py-1 text-lg">
                       History
                     </Link>
-                    <Link href="/profile" className="block px-2 py-1 text-lg">
-                      Profile
+                    <Link href="/account" className="block px-2 py-1 text-lg">
+                      Account
                     </Link>
                 </nav>
               </SheetContent>
@@ -62,8 +62,8 @@ const Header = () => {
                 </Link>
             </Button>
             <Button asChild variant="ghost">
-                <Link href="/profile" className="text-sm font-medium transition-colors">
-                    Profile
+                <Link href="/account" className="text-sm font-medium transition-colors">
+                    Account
                 </Link>
             </Button>
           </nav>
