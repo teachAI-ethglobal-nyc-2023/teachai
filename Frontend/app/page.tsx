@@ -6,6 +6,9 @@ import Head from 'next/head';
 import { useAccount } from "wagmi";
 import { useState, useEffect } from "react";
 
+import { PromptForm } from '@/components/prompt-form'
+import { cn } from '@/lib/utils'
+
 export default function Home() {
   return (
     <div>
@@ -19,9 +22,19 @@ export default function Home() {
       </Head>
 
       <main>
+      <div className={cn('pb-[200px] pt-4 md:pt-10')}>
 
-        <h1>Teach</h1>
-        
+      </div>
+        <div className="fixed inset-x-0 bottom-0 bg-gradient-to-b from-muted/10 from-10% to-muted/30 to-50%">
+
+          <div className="mx-auto sm:max-w-2xl sm:px-4">
+            
+          </div>
+          <div className="space-y-4 border-t bg-background mx-8 mb-8 px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
+            <PromptForm />
+          </div>
+        </div>
+
       </main>
 
     </div>

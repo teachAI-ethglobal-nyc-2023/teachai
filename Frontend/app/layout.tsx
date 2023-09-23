@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
 import { ThemeProvider } from "@/components/theme-provider"
+import { TooltipProvider } from '@/components/ui/tooltip'
 
 import { Providers } from './providers';
 import Header from "../components/header";
@@ -32,8 +33,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Providers>
-            <Header />
-            {children}
+            <TooltipProvider>
+              <Header />
+                {children}
+            </TooltipProvider>
           </Providers>
         </ThemeProvider>
       </body>
