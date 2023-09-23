@@ -37,6 +37,8 @@ type Model @entity(immutable: true) {
     title: String!
     " the user that assigned the contract to the model "
     user: User!
+    " the number of prompts the model has received "
+    promptCount: BigInt!
     " the number of inferences the model has made "
     inferenceCount: BigInt!
     " the number of feedbacks the model has received "
@@ -75,6 +77,8 @@ type Inference @entity(immutable: true) {
     eventIndex: BigInt!
     " the model that made the inference "
     model: Model!
+    " the prompt that was sent to the model "
+    prompt: Prompt!
     " the user that made the inference "
     user: User!
     " the text that was inferred "
