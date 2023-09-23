@@ -48,6 +48,9 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "encoding": "^0.1.13",
+    "lokijs": "^1.5.12",
+    "pino-pretty": "^10.2.0",
     "tailwind-merge": "^1.14.0"
   }
 }
