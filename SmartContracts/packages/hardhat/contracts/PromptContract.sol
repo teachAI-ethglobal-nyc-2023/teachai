@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract PromptMarketContract is Ownable {
     IERC20 public taiToken;
     uint256 public promptCount;
+    uint256 public modelCount;
     
     struct Prompt {
         string question;
@@ -14,12 +15,28 @@ contract PromptMarketContract is Ownable {
         string option2;
         bool responded;
         address responder;
+        bool feedback; // false if no feedback, true if feedback
+        bool isOneBetter; // true if option1 is better
+        address feedbackProvider; // address of the feedback provider
+    }
+
+    struct Model {
+        string modelID;
+        address modelOwner;
+        string modelTitle;
     }
 
     mapping(uint256 => Prompt) public prompts;
+    mapping(uint256 => Model) public models;
 
     event PromptSet(uint256 indexed promptNumber, string question, string option1, string option2);
     event PromptResponse(uint256 indexed promptNumber, uint256 responseIndex, address responder);
+
+    event logFeedback (
+        uint256 indexed promptNumber,
+        bool isOneBetter,
+        address feedbackProvider
+    );
 
     constructor(address _taiToken) {
         taiToken = IERC20(_taiToken);
@@ -48,7 +65,10 @@ contract PromptMarketContract is Ownable {
             option1: option1,
             option2: option2,
             responded: false,
-            responder: address(0)
+            responder: address(0),
+            feedback: false,
+            isOneBetter: false,
+            feedbackProvider: address(0)
         });
 
         emit PromptSet(promptCount, question, option1, option2);
@@ -68,6 +88,23 @@ contract PromptMarketContract is Ownable {
         taiToken.transfer(msg.sender, rewardAmount);
 
         emit PromptResponse(promptNumber, responseIndex, msg.sender);
+    }
+
+    function inferenceFeedback(
+        uint256 promptNumber, 
+        bool isOneBetter
+    ) {
+
+        require(promptNumber > 0 && promptNumber <= promptCount, "Invalid prompt number");
+        Prompt storage prompt = prompts[promptNumber];
+        require(!prompt.feedback, "Prompt already responded to");
+
+        prompt.feedback = true;
+        prompt.isOneBetter = isOneBetter;
+        prompt.feedbackProvider = msg.sender;
+
+        emit logFeedback(promptNumber, isOneBetter, msg.sender);
+
     }
 
     function withdrawTokens(address to, uint256 amount) external onlyOwner {
