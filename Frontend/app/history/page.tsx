@@ -6,22 +6,13 @@ import Head from 'next/head';
 
 import { useAccount } from "wagmi";
 import { useState, useEffect } from "react";
-
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table";  
+import { cn } from '@/lib/utils'
 
 import {
     SimpleTable, 
-    // sampleInvoices,
     sampleResponses,
 } from "@/components/simple-table";
+import { Button } from '@/components/ui/button';
 
 const History: NextPage = () => {
 
@@ -58,8 +49,10 @@ const History: NextPage = () => {
       </Head>
 
       <main>
-        <button onClick={addInvoice}>Add Row</button>
-        <SimpleTable tableInput={tableInput} />
+        <div className={cn('pb-[200px] pt-4 md:pt-10 m-8')}>
+        <Button onClick={addInvoice}>Add Row</Button>
+          <SimpleTable tableInput={tableInput} />
+        </div>
       </main>
 
     </div>
