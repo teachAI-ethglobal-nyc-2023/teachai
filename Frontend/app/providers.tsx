@@ -14,12 +14,16 @@ import {
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
   mainnet,
-  polygon,
-  optimism,
-  arbitrum,
-  base,
-  zora,
   goerli,
+  polygon,
+  polygonMumbai,
+  filecoin,
+  filecoinCalibration,
+  arbitrum,
+  arbitrumGoerli,
+  arbitrumNova,
+  base,
+  baseGoerli,
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 
@@ -27,10 +31,14 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
     polygon,
-    optimism,
+    polygonMumbai,
+    filecoin,
+    filecoinCalibration,
     arbitrum,
+    arbitrumGoerli,
+    arbitrumNova,
     base,
-    zora,
+    baseGoerli,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [goerli] : []),
   ],
   [publicProvider()]
