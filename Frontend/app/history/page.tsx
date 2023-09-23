@@ -19,14 +19,15 @@ import {
 
 import {
     SimpleTable, 
-    sampleInvoices,
+    // sampleInvoices,
+    sampleResponses,
 } from "@/components/simple-table";
 
 const History: NextPage = () => {
 
   const [isClient, setIsClient] = useState(false);
-  const [invoices, setInvoices] = useState(
-    sampleInvoices
+  const [tableInput, setTableInput] = useState(
+    sampleResponses
   );
 
   useEffect(() => {
@@ -35,14 +36,14 @@ const History: NextPage = () => {
 
   const addInvoice = () => {
     // Create a new invoice and add it to the invoices state
-    const newInvoice = {
-      invoice: `INV00${invoices.length + 1}`,
-      paymentStatus: 'Pending',
-      totalAmount: '$100.00',
-      paymentMethod: 'Credit Card',
+    const newRow = {
+      model: `0x${tableInput.length + 1}`,
+      prompt: 'how do we move forward',
+      betterResponse: 'by looking backward',
+      worseResponse: 'by building more robots',
     };
 
-    setInvoices((prevInvoices) => [...prevInvoices, newInvoice]);
+    setTableInput((prevInvoices) => [...prevInvoices, newRow]);
   };
 
   return (
@@ -57,8 +58,8 @@ const History: NextPage = () => {
       </Head>
 
       <main>
-        <button onClick={addInvoice}>Add Invoice</button>
-        <SimpleTable invoices={invoices} />
+        <button onClick={addInvoice}>Add Row</button>
+        <SimpleTable tableInput={tableInput} />
       </main>
 
     </div>
