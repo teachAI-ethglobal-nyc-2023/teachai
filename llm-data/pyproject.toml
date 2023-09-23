@@ -9,6 +9,7 @@ packages = [{include = "llm_data"}]
 [tool.poetry.dependencies]
 python = "^3.11"
 subgrounds = "^1.7.1"
+web3 = "^6.10.0"
 
 
 [tool.poetry.group.dev.dependencies]
