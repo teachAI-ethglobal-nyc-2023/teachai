@@ -27,6 +27,9 @@ import { createPublicClient, createWalletClient, custom, http } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { mainnet, polygonMumbai } from 'viem/chains'
 import { wagmiAbi } from '../abi/abi'
+import { useContractEvent } from 'wagmi'
+
+// import { ContractTransaction } from 'ethers';
 
 interface promptQuestions {
   message: string;
@@ -81,6 +84,16 @@ export default function Home() {
     newPrompt.optionResponse = option;
     setPromptQuestions([...promptQuestions]);
   };
+
+  useContractEvent({
+    address: '0xD5cFA2271467e49059CdACF37622d3b76C64199D',
+    abi: wagmiAbi,
+    eventName: 'logPrompt',
+    listener(log) {
+      console.log('here is where we are pulling in the logs for the logPrompt event')
+      console.log(log)
+    },
+  })
 
   return (
     <div>
