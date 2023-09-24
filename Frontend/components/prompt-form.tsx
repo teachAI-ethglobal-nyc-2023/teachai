@@ -12,19 +12,28 @@ import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
 import { cn } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 
-export function PromptForm() {
+interface PromptFormProps {
+  propVariable: boolean;
+  updateValue: (prompt: string) => void;
+}
+
+export function PromptForm(props: PromptFormProps) {
 
   const [input, setInput] = React.useState('')
   const { formRef, onKeyDown } = useEnterSubmit()
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
   const router = useRouter()
   const isLoading = false;
-
+  
   React.useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus()
     }
   }, [])
+
+  const processInput = (input: string) => {
+    props.updateValue(input);
+  }
 
   return (
     <form
@@ -33,6 +42,7 @@ export function PromptForm() {
         if (!input?.trim()) {
           return
         }
+        processInput(input);
         setInput('')
         // Input logic here
         console.log(input);

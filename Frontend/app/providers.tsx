@@ -26,22 +26,22 @@ import {
   baseGoerli,
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
+import { alchemyProvider } from 'wagmi/providers/alchemy'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
+    goerli,
     polygon,
     polygonMumbai,
-    filecoin,
-    filecoinCalibration,
     arbitrum,
     arbitrumGoerli,
     arbitrumNova,
-    base,
-    baseGoerli,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [goerli] : []),
   ],
-  [publicProvider()]
+  [ alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || ''}),
+    publicProvider()
+  ]
 );
 
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "";
