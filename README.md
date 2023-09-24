@@ -39,6 +39,8 @@ docker compose -f ../docker-compose.yml -f ./docker-compose.override.yml up
 
 To interact with the Cartesi machine, we need to use front-end console.
 
+use https://github.com/dhood/rollups-examples/tree/main/frontend-console
+
 ```bash
 cd ../frontend-console/
 yarn
