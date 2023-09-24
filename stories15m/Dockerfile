@@ -5,7 +5,7 @@ WORKDIR /opt/cartesi/dapp
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
-  build-essential \
+  build-essential xxd \
   && rm -rf /var/apt/lists/*
 
 
