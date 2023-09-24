@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+import './global.css'; 
+
 import React from "react";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";

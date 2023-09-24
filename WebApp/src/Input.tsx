@@ -16,8 +16,20 @@ import { useRollups } from "./useRollups";
 import { useWallets } from "@web3-onboard/react";
 import { IERC20__factory } from "./generated/rollups";
 
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+  } from "./components/ui/card"
+  import { Button } from "./components/ui/button"
+  import { Input } from "./components/ui/input"
+  import { Label } from "./components/ui/label"
 
-export const Input: React.FC = () => {
+
+export const InputForm: React.FC = () => {
     const rollups = useRollups();
     const [connectedWallet] = useWallets();
     const provider = new ethers.providers.Web3Provider(
@@ -91,64 +103,64 @@ export const Input: React.FC = () => {
     const [etherAmount, setEtherAmount] = useState<number>(0);
 
     return (
-        <div>
+        <Card className="m-8 p-6">
             <div>
-                Send Input <br />
-                Input: <input
+                <Label className="text-lg">Send Input</Label> <br />
+                Input: <Input className="my-2 bg-slate-200"
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                 />
-                <button onClick={() => addInput(input)} disabled={!rollups}>
+                <Button onClick={() => addInput(input)} disabled={!rollups}>
                     Send
-                </button>
+                </Button>
                 <br /><br />
             </div>
             <div>
-                Deposit Ether <br />
-                Amount: <input
+                <Label className="text-lg">Deposit Ether</Label> <br />
+                Amount: <Input className="my-2 bg-slate-200"
                     type="number"
                     value={etherAmount}
                     onChange={(e) => setEtherAmount(Number(e.target.value))}
                 />
-                <button onClick={() => depositEtherToPortal(etherAmount)} disabled={!rollups}>
+                <Button onClick={() => depositEtherToPortal(etherAmount)} disabled={!rollups}>
                     Deposit Ether
-                </button>
+                </Button>
                 <br /><br />
             </div>
             <div>
-                Deposit ERC20 <br />
-                Address: <input
+                <Label className="text-lg">Deposit ERC20</Label> <br />
+                Address: <Input className="my-2 bg-slate-200"
                     type="text"
                     value={erc20Token}
                     onChange={(e) => setErc20Token(e.target.value)}
                 />
-                Amount: <input
+                Amount: <Input className="my-2 bg-slate-200"
                     type="number"
                     value={erc20Amount}
                     onChange={(e) => setErc20Amount(Number(e.target.value))}
                 />
-                <button onClick={() => depositErc20ToPortal(erc20Token,erc20Amount)} disabled={!rollups}>
+                <Button onClick={() => depositErc20ToPortal(erc20Token,erc20Amount)} disabled={!rollups}>
                     Deposit ERC20
-                </button>
+                </Button>
                 <br /><br />
             </div>
             <div>
-                Transfer ERC721 <br />
-                Address: <input
+                <Label className="text-lg">Transfer ERC721</Label> <br />
+                Address: <Input className="my-2 bg-slate-200"
                     type="text"
                     value={erc721}
                     onChange={(e) => setErc721(e.target.value)}
                 />
-                id: <input
+                id: <Input className="my-2 bg-slate-200"
                     type="number"
                     value={erc721Id}
                     onChange={(e) => setErc721Id(Number(e.target.value))}
                 />
-                <button onClick={() => transferNftToPortal(erc721,erc721Id)} disabled={!rollups}>
+                <Button onClick={() => transferNftToPortal(erc721,erc721Id)} disabled={!rollups}>
                     Transfer NFT
-                </button>
+                </Button>
             </div>
-        </div>
+        </Card>
     );
 };
