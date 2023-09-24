@@ -138,7 +138,7 @@ async def main():
 
     subgraph = 'https://api.thegraph.com/subgraphs/name/denverbaumgartner/teachai'
     td = TrainData(url=subgraph)
-    ex = Execute()
+    ex = Execute(POLYGON_MUMBAI=POLYGON_MUMBAI, DEV_WALLET=DEV_WALLET, DEV_KEY=DEV_KEY)
 
     # collect the data 
     td.data = td.get_prompts()
