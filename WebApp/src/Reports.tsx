@@ -14,6 +14,15 @@ import { ethers } from "ethers";
 import React from "react";
 import { useReportsQuery } from "./generated/graphql";
 
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+  } from "./components/ui/card"
+
 type Report = {
     id: string;
     index: number;
@@ -26,7 +35,7 @@ export const Reports: React.FC = () => {
     const { data, fetching, error } = result;
 
     if (fetching) return <p>Loading...</p>;
-    if (error) return <p>Oh no... {error.message}</p>;
+    if (error) return <Card className="m-8 p-6">Oh no... {error.message}</Card>;
 
     if (!data || !data.reports) return <p>No reports</p>;
 
@@ -61,7 +70,7 @@ export const Reports: React.FC = () => {
 
     // const forceUpdate = useForceUpdate();
     return (
-        <div>
+        <Card className="m-8 p-6">
             <button onClick={() => reexecuteQuery({ requestPolicy: 'network-only' })}>
                 Reload
             </button>
@@ -91,6 +100,6 @@ export const Reports: React.FC = () => {
                 </tbody>
             </table>
 
-        </div>
+        </Card>
     );
 };

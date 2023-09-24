@@ -10,9 +10,31 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+
+
 import { FC } from "react";
 import { useConnectWallet, useSetChain } from "@web3-onboard/react";
 import configFile from "./config.json";
+
+import { Button } from "./components/ui/button"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+  } from "./components/ui/dropdown-menu"
+  import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+  } from "./components/ui/card"
+  import { Input } from "./components/ui/input"
+  import { Label } from "./components/ui/label"  
 
 const config: any = configFile;
 
@@ -21,20 +43,20 @@ export const Network: FC = () => {
     const [{ chains, connectedChain, settingChain }, setChain] = useSetChain();
     return (
         <div>
-            <button
+            <Button className="m-8"
                 onClick={() =>
                     connect()
                 }
             >
                 {connecting ? "connecting" : "connect"}
-            </button>
+            </Button>
             {wallet && (
-                <div>
-                    <label>Switch Chain</label>
+                <Card className="m-8 p-6">
+                    <Label>Switch Chain</Label>
                     {settingChain ? (
                         <span>Switching chain...</span>
                     ) : (
-                        <select
+                        <select className='mx-4 border-solid bg-slate-200 p-1'
                             onChange={({ target: { value } }) => {
                                 if (config[value] !== undefined) {
                                     setChain({ chainId: value })
@@ -54,10 +76,10 @@ export const Network: FC = () => {
                             })}
                         </select>
                     )}
-                    <button onClick={() => disconnect(wallet)}>
+                    <Button className="mx-8" onClick={() => disconnect(wallet)}>
                         Disconnect Wallet
-                    </button>
-                </div>
+                    </Button>
+                </Card>
             )}
         </div>
     );

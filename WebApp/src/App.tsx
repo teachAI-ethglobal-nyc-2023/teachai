@@ -16,12 +16,14 @@ import { init } from "@web3-onboard/react";
 
 import { GraphQLProvider } from "./GraphQL";
 import { Notices } from "./Notices";
-import { Input } from "./Input";
+import { InputForm } from "./Input";
 import { Inspect } from "./Inspect";
 import { Network } from "./Network";
 import { Vouchers } from "./Vouchers";
 import { Reports } from "./Reports";
 import configFile from "./config.json";
+
+import { Label } from "./components/ui/label"
 
 const config: any = configFile;
 
@@ -44,15 +46,15 @@ const App: FC = () => {
         <div>
             <Network />
             <GraphQLProvider>
-                <h2>Inspect</h2>
+                <Label className="ml-8 text-2xl">Inspect</Label>
                 <Inspect />
-                <h2>Input</h2>
-                <Input />
-                <h2>Notices</h2>
+                <Label className="ml-8 text-2xl">Input</Label>
+                <InputForm />
+                <Label className="ml-8 text-2xl">Notices</Label>
                 <Notices />
-                <h2>Reports</h2>
+                <Label className="ml-8 text-2xl">Reports</Label>
                 <Reports />
-                <h2>Vouchers</h2>
+                <Label className="ml-8 text-2xl">Vouchers</Label>
                 <Vouchers />
             </GraphQLProvider>
         </div>

@@ -15,6 +15,17 @@ import { useSetChain } from "@web3-onboard/react";
 import { ethers } from "ethers";
 import { useRollups } from "./useRollups";
 
+import { Button } from "./components/ui/button"
+import { Input } from "./components/ui/input"
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+  } from "./components/ui/card"
+
 import configFile from "./config.json";
 
 const config: any = configFile;
@@ -50,16 +61,16 @@ export const Inspect: React.FC = () => {
     const [metadata, setMetadata] = useState<any>({});
 
     return (
-        <div>
+        <Card className="m-8 p-6">
             <div>
-                <input
+                <Input className="my-2 bg-slate-200"
                     type="text"
                     value={inspectData}
                     onChange={(e) => setInspectData(e.target.value)}
                 />
-                <button onClick={() => inspectCall(inspectData)} disabled={!rollups}>
+                <Button className="my-2" onClick={() => inspectCall(inspectData)} disabled={!rollups}>
                     Send
-                </button>
+                </Button>
             </div>
 
             <table>
@@ -95,6 +106,6 @@ export const Inspect: React.FC = () => {
                     ))}
                 </tbody>
             </table>
-        </div>
+        </Card>
     );
 };

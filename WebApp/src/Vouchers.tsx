@@ -16,6 +16,15 @@ import { useVouchersQuery, useVoucherQuery } from "./generated/graphql";
 import { useRollups } from "./useRollups";
 import { OutputValidityProofStruct } from "@cartesi/rollups/dist/src/types/contracts/interfaces/IOutput";
 
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+  } from "./components/ui/card"
+
 type Voucher = {
     id: string;
     index: number;
@@ -102,7 +111,7 @@ export const Vouchers: React.FC = () => {
     },[voucherResult, rollups, executedVouchers]);
 
     if (fetching) return <p>Loading...</p>;
-    if (error) return <p>Oh no... {error.message}</p>;
+    if (error) return <Card className="m-8 p-6">Oh no... {error.message}</Card>;
 
     if (!data || !data.vouchers) return <p>No vouchers</p>;
 
@@ -178,7 +187,7 @@ export const Vouchers: React.FC = () => {
 
     // const forceUpdate = useForceUpdate();
     return (
-        <div>
+        <Card className="m-8 p-6">
             <p>Voucher to execute</p>
         {voucherToExecute ? <table>
             <thead>
@@ -251,6 +260,6 @@ export const Vouchers: React.FC = () => {
                 </tbody>
             </table>
 
-        </div>
+        </Card>
     );
 };
