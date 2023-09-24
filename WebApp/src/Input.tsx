@@ -104,7 +104,7 @@ export const InputForm: React.FC = () => {
 
     return (
         <Card className="m-8 p-6">
-            <div>
+            <div> 
                 <Label className="text-lg">Send Input</Label> <br />
                 Input: <Input className="my-2 bg-slate-200"
                     type="text"
