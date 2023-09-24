@@ -29,7 +29,6 @@ import { mainnet, polygonMumbai } from 'viem/chains'
 import { wagmiAbi } from '../abi/abi'
 import { useContractEvent } from 'wagmi'
 
-// import { ContractTransaction } from 'ethers';
 
 interface promptQuestions {
   message: string;
@@ -45,6 +44,7 @@ export default function Home() {
   const [existPreviousMessage, setExistPreviousMessage] = React.useState(false);
   const [promptQuestions, setPromptQuestions] = useState<promptQuestions[]>([]);
   var targetTransactionHash = "";
+  let promptNumber: bigint;
 
   const walletClient = createWalletClient({
     chain: polygonMumbai,
@@ -53,15 +53,35 @@ export default function Home() {
 
   const updateValueInParent = async (prompt: string) => {
 
+    const [account] = await walletClient.getAddresses();
 
+    await walletClient.writeContract({
+      address: process.env.NEXT_PUBLIC_MUMBAI_CONTRACT_ADDRESS  as `0x${string}`,
+      abi: wagmiAbi,
+      functionName: 'setPrompt',
+      args: [prompt],
+      account: account,
+      chain: polygonMumbai
+    }).then((result) => {
+      targetTransactionHash = result.toString();
+    }).catch((error) => {
+      console.log(error);
+    });
+
+  };
+
+  const updatePromptResponse = async (index: number, option: number) => {
+    const newPrompt = promptQuestions[index];
+    newPrompt.optionResponse = option;
+    setPromptQuestions([...promptQuestions]);
 
     const [account] = await walletClient.getAddresses();
 
     await walletClient.writeContract({
-      address: '0xD5cFA2271467e49059CdACF37622d3b76C64199D',
+      address: process.env.NEXT_PUBLIC_MUMBAI_CONTRACT_ADDRESS  as `0x${string}`,
       abi: wagmiAbi,
-      functionName: 'setPrompt',
-      args: [prompt],
+      functionName: 'respondToPromptOptions',
+      args: [option],
       account: account,
       chain: polygonMumbai
     }).then((result) => {
@@ -71,14 +91,8 @@ export default function Home() {
       targetTransactionHash = txStr;
     }).catch((error) => {
       console.log(error);
-    });
+    });    
 
-  };
-
-  const updatePromptResponse = (index: number, option: number) => {
-    const newPrompt = promptQuestions[index];
-    newPrompt.optionResponse = option;
-    setPromptQuestions([...promptQuestions]);
   };
 
   useContractEvent({
@@ -105,7 +119,6 @@ export default function Home() {
       // system add options to response
       newPrompt.option1 = foundObject.args.option1;
       newPrompt.option2 = foundObject.args.option2;
-
       // *************
 
       }
