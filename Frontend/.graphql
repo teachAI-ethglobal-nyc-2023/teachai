@@ -1,0 +1,16 @@
+query ExampleQuery {
+  prompts(1000) {
+    id
+    transaction {
+      id
+    }
+    model {
+      id
+    }
+    text
+    optionOne
+    optionTwo
+    isOneBetter
+    hasFeedback
+  }
+}
