@@ -1,8 +1,8 @@
 import { ZERO_BI, ONE_BI } from "./utils/constants";
 import { getUser } from "./utils/entities/user";
 import { getTransaction } from "./utils/entities/transaction";
-import { User, Transaction, Model, Prompt, Inference, Feedback } from "../generated/schema";
-import { logModel, logPrompt, logInference, logFeedback } from '../generated/PromptMarket/PromptMarketContract';
+import { User, Transaction, Model, Prompt, Inference, Feedback, CID } from "../generated/schema";
+import { logModel, logPrompt, logInference, logFeedback, logBroadcast } from '../generated/PromptMarket/PromptMarketContract';
 import { Bytes } from "@graphprotocol/graph-ts";
 
 export function handleLogModel(event: logModel): void {
@@ -251,4 +251,20 @@ export function handleLogFeedback(event: logFeedback): void {
         prompt.hasFeedback = true
         prompt.save()
     }
+}
+
+export function handleLogBroadcast(event: logBroadcast): void {
+
+    // load the transaction entity
+    let transaction = getTransaction(event)
+
+    // load the user entity
+    let user = getUser(event.transaction.from)
+
+    // create the CID entity
+    let cid = new CID(event.params.cid) 
+    cid.transaction = transaction.id
+    cid.eventIndex = event.logIndex
+    cid.user = user.id
+    cid.save()
 }

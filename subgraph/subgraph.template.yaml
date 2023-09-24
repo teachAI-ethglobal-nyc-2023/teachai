@@ -1,5 +1,7 @@
 specVersion: 0.0.5
 description: a subgraph to support the teachai protocol
+features: 
+  - ipfsOnEthereumContracts
 repository: https://github.com/teachAI-ethglobal-nyc-2023/teachai
 schema: 
   file: ./schema.graphql
@@ -35,3 +37,18 @@ dataSources:
           handler: handleLogInference
         - event: logFeedback(uint256,bool,address)
           handler: handleLogFeedback
+        - event: logBroadcast(string,address)
+          handler: handleLogBroadcast
+templates:
+  - name: CID
+    kind: file/ipfs
+    mapping:
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/FileSource.ts
+      handler: handleCID
+      entities:
+        - TokenMetadata
+      abis:
+        - name: PromptMarketContract
+          file: ./abis/PromptMarketContract.json
