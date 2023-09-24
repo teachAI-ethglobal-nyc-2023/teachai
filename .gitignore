@@ -130,7 +130,7 @@ dist
 .pnp.*
 SmartContracts/yarn.lock
 
-# subgraph
+package-lock.json
 subgraph/build/
 subgraph/generated/
 yarn.lock
