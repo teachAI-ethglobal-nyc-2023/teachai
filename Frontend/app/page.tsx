@@ -14,6 +14,8 @@ import { Label } from '@radix-ui/react-dropdown-menu';
 import { ChatScrollAnchor } from '@/components/chat-scroll-anchor';
 import { Button } from '@/components/ui/button';
 
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
+
 import {
   Card,
   CardContent,
@@ -29,7 +31,26 @@ import { mainnet, polygonMumbai } from 'viem/chains'
 import { wagmiAbi } from '../abi/abi'
 import { useContractEvent } from 'wagmi'
 
+const APIURL = 'https://api.thegraph.com/subgraphs/name/denverbaumgartner/teachai';
 
+const tokensQuery = `
+  query {
+    prompts(first: 10) { 
+      id
+      transaction {
+        id
+      }
+      model {
+        id
+      }
+      text
+      optionOne
+      optionTwo
+      isOneBetter
+      hasFeedback
+    }
+  }
+`
 interface promptQuestions {
   message: string;
   id?: number;
@@ -51,9 +72,24 @@ export default function Home() {
     transport: custom(window.ethereum)
   })
 
+  const client = new ApolloClient({
+    uri: APIURL,
+    cache: new InMemoryCache(),
+  })
+  
+
   const updateValueInParent = async (prompt: string) => {
 
     const [account] = await walletClient.getAddresses();
+
+    // client
+    // .query({
+    //   query: gql(tokensQuery),
+    // })
+    // .then((data) => console.log('Subgraph data: ', data))
+    // .catch((err) => {
+    //   console.log('Error fetching data: ', err)
+    // })    
 
     await walletClient.writeContract({
       address: process.env.NEXT_PUBLIC_MUMBAI_CONTRACT_ADDRESS  as `0x${string}`,
@@ -71,6 +107,10 @@ export default function Home() {
   };
 
   const updatePromptResponse = async (index: number, option: number) => {
+
+
+
+
     const newPrompt = promptQuestions[index];
     newPrompt.optionResponse = option;
     setPromptQuestions([...promptQuestions]);
