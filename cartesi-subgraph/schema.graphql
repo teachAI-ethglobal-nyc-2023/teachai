@@ -1,0 +1,48 @@
+type User @entity {
+    " the address of the user "
+    id: Bytes!
+    " the number of requests the user has made "
+    inferenceCount: BigInt!
+    " the number of feedbacks the user has made "
+    feedbackCount: BigInt!
+    " the prompts the user has made "
+    prompt: [Prompt!]! @derivedFrom(field: "user")
+    " the inferences the user has received "
+    inference: [Inference!]! @derivedFrom(field: "user")
+    " the feedbacks the user has made "
+    feedback: [Feedback!]! @derivedFrom(field: "user")
+    " the models the user has used "
+    model: [Model!]! @derivedFrom(field: "user")
+}
+
+type Transaction @entity(immutable: true) {
+    " the transaction hash "
+    id: Bytes!
+    " the transaction timestamp "
+    timestamp: BigInt!
+    " the transaction block number "
+    blockNumber: BigInt!
+    " the transaction block index "
+    blockIndex: BigInt!
+}
+
+type Prompt @entity {
+    " the unique id for the prompt "
+    id: Bytes!
+    " the transaction entity "
+    transaction: Transaction!
+    " the event index "
+    eventIndex: BigInt!
+    " the user that submitted the prompt "
+    user: User!
+    " the text that was sent to the model "
+    prompt: Bytes!
+    " option one of the inference response "
+    textOne: String!
+    " option two of the inference response "
+    textTwo: String!
+    " feedback, if any, that was made from the prompt "
+    isOneBetter: Boolean!
+    " indicate if feedback was made "
+    hasResponse: Boolean!
+}

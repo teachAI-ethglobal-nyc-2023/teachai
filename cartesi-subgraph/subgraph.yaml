@@ -1,0 +1,37 @@
+specVersion: 0.0.5
+description: a subgraph to support the teachai protocol
+repository: https://github.com/teachAI-ethglobal-nyc-2023/teachai
+schema: 
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PromptMarket
+    network: mumbai
+    source: 
+      address: '0x76cb33a84cb5cae9283c9cafe6a24a457ee812f4'
+      abi: PromptMarketContract
+      startBlock: 40450663
+    mapping: 
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/PromptMarket.ts
+      entities: 
+        - User
+        - Transaction 
+        - Model
+        - Prompt
+        - Inference
+        - Feedback
+      abis:
+        - name: PromptMarketContract
+          file: ./abis/PromptMarketContract.json
+      eventHandlers: 
+        - event: logModel(uint256,string,string,address)
+          handler: handleLogModel
+        - event: logPrompt(uint256,uint256,string,string,string)
+          handler: handleLogPrompt
+        - event: logInference(uint256,string,string,uint256)
+          handler: handleLogInference
+        - event: logFeedback(uint256,bool,address)
+          handler: handleLogFeedback
