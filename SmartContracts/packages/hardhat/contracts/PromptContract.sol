@@ -78,6 +78,11 @@ contract PromptMarketContract is Ownable {
         address feedbackProvider
     );
 
+    event logBroadcast (
+        string indexed cid, 
+        address indexed broadcaster
+    );
+
     /**
      * DEFINE THE CONSTRUCTOR
      */
@@ -197,6 +202,14 @@ contract PromptMarketContract is Ownable {
         emit logFeedback(
             promptNumber, 
             prompt.isOneBetter,
+            msg.sender
+        );
+    }
+
+    // can be called by a user to signal they have published a dataset to IPFS
+    function broadcastUpload(string memory cid) external {
+        emit logBroadcast(
+            cid, 
             msg.sender
         );
     }
