@@ -242,15 +242,15 @@ contract PromptMarketContract is Ownable {
      * DEFINE THE EVENTS
      */
     event logModel (
-        uint256 indexed modelNumber,
+        uint256 modelNumber,
         string modelID,
         string modelTitle,
         address modelOwner
     );
 
     event logPrompt(
-        uint256 indexed promptNumber, 
-        uint256 indexed modelNumber, 
+        uint256 promptNumber, 
+        uint256 modelNumber, 
         string question, 
         string option1, 
         string option2
@@ -265,14 +265,14 @@ contract PromptMarketContract is Ownable {
      */
 
     event logInference (
-        uint256 indexed promptNumber,
+        uint256 promptNumber,
         string textOne,
         string textTwo,
         uint256 modelNumber
     );
 
     event logFeedback (
-        uint256 indexed promptNumber,
+        uint256 promptNumber,
         bool isOneBetter,
         address feedbackProvider
     );

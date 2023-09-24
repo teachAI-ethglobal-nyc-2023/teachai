@@ -84,6 +84,10 @@ export function handleLogPrompt(event: logPrompt): void {
         prompt.model = model.id
         prompt.user = user.id
         prompt.text = event.params.question
+        prompt.optionOne = event.params.option1
+        prompt.optionTwo = event.params.option2
+        prompt.isOneBetter = true
+        prompt.hasFeedback = false
         prompt.save()
 
         // update the model entity
@@ -95,6 +99,10 @@ export function handleLogPrompt(event: logPrompt): void {
         prompt.model = model.id
         prompt.user = user.id
         prompt.text = event.params.question
+        prompt.optionOne = event.params.option1
+        prompt.optionTwo = event.params.option2
+        prompt.isOneBetter = true
+        prompt.hasFeedback = false
         prompt.save()
     }
 }
@@ -143,8 +151,8 @@ export function handleLogInference(event: logInference): void {
         inference.model = model.id
         inference.prompt = prompt.id
         inference.user = user.id
-        inference.textOne = Bytes.fromByteArray(event.params.textOne).toString()
-        inference.textTwo = Bytes.fromByteArray(event.params.textTwo).toString()
+        inference.textOne = event.params.textOne
+        inference.textTwo = event.params.textTwo
         inference.save()
 
         // update the model entity
@@ -156,11 +164,13 @@ export function handleLogInference(event: logInference): void {
         inference.model = model.id
         inference.prompt = prompt.id
         inference.user = user.id
-        inference.textOne = Bytes.fromByteArray(event.params.textOne).toString()
-        inference.textTwo = Bytes.fromByteArray(event.params.textOne).toString()
+        inference.textOne = event.params.textOne
+        inference.textTwo = event.params.textOne
         inference.save()
     }
     prompt.inference = inference.id
+    prompt.optionOne = event.params.textOne
+    prompt.optionTwo = event.params.textTwo
     prompt.save()
 }
 
@@ -222,6 +232,8 @@ export function handleLogFeedback(event: logFeedback): void {
 
         // update the prompt entity
         prompt.feedback = feedback.id
+        prompt.isOneBetter = event.params.isOneBetter
+        prompt.hasFeedback = true
         prompt.save()
     } else {
         feedback.transaction = transaction.id
@@ -235,6 +247,8 @@ export function handleLogFeedback(event: logFeedback): void {
 
         // update the prompt entity
         prompt.feedback = feedback.id
+        prompt.isOneBetter = event.params.isOneBetter
+        prompt.hasFeedback = true
         prompt.save()
     }
 }
