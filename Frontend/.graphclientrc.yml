@@ -1,0 +1,6 @@
+# .graphclientrc.yml
+sources:
+  - name: teachai
+    handler:
+      graphql:
+        endpoint: https://api.thegraph.com/subgraphs/name/denverbaumgartner/teachai
