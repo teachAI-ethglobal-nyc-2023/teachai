@@ -64,6 +64,14 @@ type Prompt @entity {
     user: User!
     " the text that was sent to the model "
     text: String!
+    " option one of the inference response "
+    optionOne: String!
+    " option two of the inference response "
+    optionTwo: String!
+    " feedback, if any, that was made from the prompt "
+    isOneBetter: Boolean!
+    " indicate if feedback was made "
+    hasFeedback: Boolean!
     " the inference that was made from the prompt "
     inference: Inference
     " the feedback that was made from the inference "
