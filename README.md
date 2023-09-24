@@ -11,6 +11,20 @@ cd stories15m
 wget https://huggingface.co/karpathy/tinyllamas/resolve/main/stories15M.bin
 ```
 
+Install docker check that it supports qemu (https://docs.cartesi.io/cartesi-rollups/build-dapps/run-dapp/)
+
+```bash
+docker buildx ls
+
+```
+
+If you do not see linux/riscv64 in the platforms list, install QEMU by running:
+
+
+```bash
+apt install qemu-user-static
+```
+
 Build the docker that will create the machine and the interaction with the evm
 
 ```bash
