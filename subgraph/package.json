@@ -6,8 +6,8 @@
         "test": "graph test",
         "coverage": "graph test -- -c",
 
-        "prepare:arbitrum": "mustache config/arbitrum.json subgraph.template.yaml > subgraph.yaml",
-        "deploy:arbitrum": "graph deploy --product hosted-service denverbaumgartner/rubiconv2-arbitrum-one",
+        "prepare:mumbai": "mustache config/mumbai.json subgraph.template.yaml > subgraph.yaml",
+        "deploy:mumbai": "graph deploy --product hosted-service denverbaumgartner/teachai",
         
         "codegen": "graph codegen",
         "build": "graph build"

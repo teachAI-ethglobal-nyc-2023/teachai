@@ -1,4 +1,4 @@
-import { ZERO_BI } from "./constants";
+import { ZERO_BI } from "../constants";
 import { User } from "../../../generated/schema";
 import { Address } from '@graphprotocol/graph-ts';
 

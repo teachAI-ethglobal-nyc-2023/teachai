@@ -134,3 +134,4 @@ package-lock.json
 subgraph/build/
 subgraph/generated/
 yarn.lock
+.DS_Store
