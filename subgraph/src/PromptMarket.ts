@@ -130,6 +130,8 @@ export function handleLogInference(event: logInference): void {
         return 
     } 
 
+    
+
     // attempt to load the inference entity
     let inference = Inference.load(Bytes.fromByteArray((Bytes.fromBigInt(event.params.promptNumber))))
 
@@ -141,8 +143,8 @@ export function handleLogInference(event: logInference): void {
         inference.model = model.id
         inference.prompt = prompt.id
         inference.user = user.id
-        inference.textOne = event.params.textOne.toString()
-        inference.textTwo = event.params.textTwo.toString()
+        inference.textOne = Bytes.fromByteArray(event.params.textOne).toString()
+        inference.textTwo = Bytes.fromByteArray(event.params.textTwo).toString()
         inference.save()
 
         // update the model entity
@@ -154,8 +156,8 @@ export function handleLogInference(event: logInference): void {
         inference.model = model.id
         inference.prompt = prompt.id
         inference.user = user.id
-        inference.textOne = event.params.textOne.toString()
-        inference.textTwo = event.params.textTwo.toString()
+        inference.textOne = Bytes.fromByteArray(event.params.textOne).toString()
+        inference.textTwo = Bytes.fromByteArray(event.params.textOne).toString()
         inference.save()
     }
     prompt.inference = inference.id

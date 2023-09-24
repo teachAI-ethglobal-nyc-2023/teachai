@@ -107,3 +107,6 @@ type Feedback @entity(immutable: true) {
     " the feedback that was made from the inference "
     isOneBetter: Boolean!
 }
+
+
+
