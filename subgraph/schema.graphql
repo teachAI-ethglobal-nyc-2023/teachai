@@ -26,8 +26,8 @@ type Transaction @entity(immutable: true) {
     blockIndex: BigInt!
 }
 
-type Model @entity(immutable: true) {
-    " the IPFS hash that the model is stored at "
+type Model @entity {
+    " the unique identifier for the model "
     id: Bytes!
     " the transaction entity "
     transaction: Transaction!
@@ -43,14 +43,16 @@ type Model @entity(immutable: true) {
     inferenceCount: BigInt!
     " the number of feedbacks the model has received "
     feedbackCount: BigInt!
-    " the inferences the model has made "
+    " the prompts the model has received "
+    prompt: [Prompt!]! @derivedFrom(field: "model")
+    " the inference the model has made "
     inference: [Inference!]! @derivedFrom(field: "model")
     " the feedbacks the model has received "
     feedback: [Feedback!]! @derivedFrom(field: "model")
 }
 
-type Prompt @entity(immutable: true) {
-    " the transactions hash "
+type Prompt @entity {
+    " the unique id for the prompt "
     id: Bytes!
     " the transaction entity "
     transaction: Transaction!
@@ -105,3 +107,6 @@ type Feedback @entity(immutable: true) {
     " the feedback that was made from the inference "
     isOneBetter: Boolean!
 }
+
+
+

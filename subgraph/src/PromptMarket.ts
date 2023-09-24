@@ -1,8 +1,9 @@
-import { ZERO_BI, ONE_BI } from "../src/utils/constants";
-import { getUser } from "../src/utils/entities/user";
-import { getTransaction } from "../src/utils/entities/transaction";
-import { User, Transaction, Model, Prompt, Inference, Feedback } from "../../../generated/schema";
-import { logModel, logPromp, logInference, logFeedback } from '../../generated/TeachAI/TeachAI';
+import { ZERO_BI, ONE_BI } from "./utils/constants";
+import { getUser } from "./utils/entities/user";
+import { getTransaction } from "./utils/entities/transaction";
+import { User, Transaction, Model, Prompt, Inference, Feedback } from "../generated/schema";
+import { logModel, logPrompt, logInference, logFeedback } from '../generated/PromptMarket/PromptMarketContract';
+import { Bytes } from "@graphprotocol/graph-ts";
 
 export function handleLogModel(event: logModel): void {
     /**
@@ -20,15 +21,15 @@ export function handleLogModel(event: logModel): void {
     let user = getUser(event.transaction.from)
 
     // attempt to load the model entity
-    let model = Model.load(event.params.model) // double check this is Bytes type after ABI codegen 
+    let model = Model.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params.modelNumber))) // double check this is Bytes type after ABI codegen 
 
     if (!model) {
         // create the model entity
-        model = new Model(event.params.model)
+        model = new Model(Bytes.fromByteArray(Bytes.fromBigInt(event.params.modelNumber)))
         model.transaction = transaction.id
         model.eventIndex = event.logIndex
-        model.title = event.params.title
-        model.owner = user.id
+        model.title = event.params.modelTitle.toString()
+        model.user = user.id
         model.promptCount = ZERO_BI
         model.inferenceCount = ZERO_BI
         model.feedbackCount = ZERO_BI
@@ -36,29 +37,19 @@ export function handleLogModel(event: logModel): void {
     } else {
         model.transaction = transaction.id
         model.eventIndex = event.logIndex
-        model.title = event.params.title
-        model.owner = user.id
+        model.title = event.params.modelTitle.toString()
+        model.user = user.id
         model.save()
     }
-
-    return model
 }
 
-export function handleLogPrompt(event: logPromp): void {
+export function handleLogPrompt(event: logPrompt): void {
     /**
      * logPrompt (
      * bytes indexed model, # IPFS hash of the model
      * string indexed prompt, # String of the prompt
      * )
      */
-
-    // attempt to load the model 
-    let model = Model.load(event.params.model)
-
-    if (!model) {
-        // TODO: gracefully fail by creating a logModel event and passing to handleLogModel
-        return 
-    }
 
     // load the transaction entity
     let transaction = getTransaction(event)
@@ -67,16 +58,32 @@ export function handleLogPrompt(event: logPromp): void {
     let user = getUser(event.transaction.from)
 
     // attempt to load the prompt entity
-    let prompt = Prompt.load(event.transaction.hash)
+    let prompt = Prompt.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params.promptNumber)))
+
+    // attempt to load the model 
+    let model = Model.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params.modelNumber)))
+
+    if (!model) {
+        // TODO: gracefully fail by creating a logModel event and passing to handleLogModel
+        model = new Model(Bytes.fromByteArray(Bytes.fromBigInt(event.params.modelNumber)))
+        model.transaction = transaction.id
+        model.eventIndex = event.logIndex
+        model.title = "filler_title"
+        model.user = user.id
+        model.promptCount = ZERO_BI
+        model.inferenceCount = ZERO_BI
+        model.feedbackCount = ZERO_BI
+        model.save()
+    }
 
     if (!prompt) {
         // create the prompt entity
-        prompt = new Prompt(event.transaction.hash)
+        prompt = new Prompt(Bytes.fromByteArray(Bytes.fromBigInt(event.params.promptNumber)))
         prompt.transaction = transaction.id
         prompt.eventIndex = event.logIndex
         prompt.model = model.id
         prompt.user = user.id
-        prompt.text = event.params.prompt
+        prompt.text = event.params.question
         prompt.save()
 
         // update the model entity
@@ -87,11 +94,9 @@ export function handleLogPrompt(event: logPromp): void {
         prompt.eventIndex = event.logIndex
         prompt.model = model.id
         prompt.user = user.id
-        prompt.text = event.params.prompt
+        prompt.text = event.params.question
         prompt.save()
     }
-
-    return
 }
 
 export function handleLogInference(event: logInference): void {
@@ -110,7 +115,7 @@ export function handleLogInference(event: logInference): void {
     let user = getUser(event.transaction.from)
 
     // attempt to load the prompt entity
-    let prompt = Prompt.load(event.params.prompt)
+    let prompt = Prompt.load(Bytes.fromByteArray((Bytes.fromBigInt(event.params.promptNumber))))
 
     if (!prompt) {
         // TODO: gracefully fail by creating a logPrompt event and passing to handleLogPrompt
@@ -125,19 +130,21 @@ export function handleLogInference(event: logInference): void {
         return 
     } 
 
+    
+
     // attempt to load the inference entity
-    let inference = Inference.load(event.transaction.hash)
+    let inference = Inference.load(Bytes.fromByteArray((Bytes.fromBigInt(event.params.promptNumber))))
 
     if (!inference) {
         // create the inference entity
-        inference = new Inference(event.transaction.hash)
+        inference = new Inference(Bytes.fromByteArray((Bytes.fromBigInt(event.params.promptNumber))))
         inference.transaction = transaction.id
         inference.eventIndex = event.logIndex
         inference.model = model.id
         inference.prompt = prompt.id
         inference.user = user.id
-        inference.textOne = event.params.textOne
-        inference.textTwo = event.params.textTwo
+        inference.textOne = Bytes.fromByteArray(event.params.textOne).toString()
+        inference.textTwo = Bytes.fromByteArray(event.params.textTwo).toString()
         inference.save()
 
         // update the model entity
@@ -149,14 +156,12 @@ export function handleLogInference(event: logInference): void {
         inference.model = model.id
         inference.prompt = prompt.id
         inference.user = user.id
-        inference.textOne = event.params.textOne
-        inference.textTwo = event.params.textTwo
+        inference.textOne = Bytes.fromByteArray(event.params.textOne).toString()
+        inference.textTwo = Bytes.fromByteArray(event.params.textOne).toString()
         inference.save()
     }
     prompt.inference = inference.id
     prompt.save()
-
-    return
 }
 
 export function handleLogFeedback(event: logFeedback): void {
@@ -173,8 +178,15 @@ export function handleLogFeedback(event: logFeedback): void {
     // load the user entity
     let user = getUser(event.transaction.from)
 
-    // attempt to load the inference entity
-    let inference = Inference.load(event.params.inference)
+    // attempt to load the prompt entity
+    let prompt = Prompt.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params.promptNumber)))
+
+    if (!prompt) {
+        // TODO: gracefully fail by creating a logPrompt event and passing to handleLogPrompt
+        return 
+    }
+
+    let inference = Inference.load(Bytes.fromByteArray(Bytes.fromBigInt(event.params.promptNumber)))
 
     if (!inference) {
         // TODO: gracefully fail by creating a logInference event and passing to handleLogInference
@@ -182,18 +194,10 @@ export function handleLogFeedback(event: logFeedback): void {
     }
 
     // attempt to load the model entity
-    let model = Model.load(inference.model)
+    let model = Model.load(prompt.model)
 
     if (!model) {
         // TODO: gracefully fail by creating a logModel event and passing to handleLogModel
-        return 
-    }
-
-    // attempt to load the prompt entity
-    let prompt = Prompt.load(inference.prompt)
-
-    if (!prompt) {
-        // TODO: gracefully fail by creating a logPrompt event and passing to handleLogPrompt
         return 
     }
 
@@ -233,6 +237,4 @@ export function handleLogFeedback(event: logFeedback): void {
         prompt.feedback = feedback.id
         prompt.save()
     }
-
-    return
 }

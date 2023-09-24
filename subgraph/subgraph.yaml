@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: PromptMarket
-    network: {{ network }}
+    network: mumbai
     source: 
-      address: '{{ PromptMarket-address }}'
+      address: '0xD5cFA2271467e49059CdACF37622d3b76C64199D'
       abi: PromptMarketContract
-      startBlock: {{ startBlock }}
+      startBlock: 40444816
     mapping: 
       kind: ethereum/events
       apiVersion: 0.0.7

@@ -44,8 +44,8 @@ contract PromptMarketContract is Ownable {
      */
     event logModel (
         uint256 indexed modelNumber,
-        string indexed modelID,
-        string indexed modelTitle,
+        string modelID,
+        string modelTitle,
         address modelOwner
     );
 
@@ -67,8 +67,8 @@ contract PromptMarketContract is Ownable {
 
     event logInference (
         uint256 indexed promptNumber,
-        string indexed textOne,
-        string indexed textTwo,
+        string textOne,
+        string textTwo,
         uint256 modelNumber
     );
 
@@ -79,8 +79,8 @@ contract PromptMarketContract is Ownable {
     );
 
     event logBroadcast (
-        string indexed cid, 
-        address indexed broadcaster
+        string cid, 
+        address broadcaster
     );
 
     /**
@@ -124,7 +124,7 @@ contract PromptMarketContract is Ownable {
         require(bytes(question).length > 0, "Question must not be empty");
 
         // Transfer 0.5 TAI from the sender to this contract
-        uint256 paymentAmount = 0.5 ether;
+        uint256 paymentAmount = 0.01 ether;
         require(
             taiToken.transferFrom(msg.sender, address(this), paymentAmount),
             "Payment failed"
@@ -195,7 +195,7 @@ contract PromptMarketContract is Ownable {
         }
 
         // Transfer 0.25 TAI to the responder
-        uint256 rewardAmount = 0.25 ether;
+        uint256 rewardAmount = 0.005 ether;
         taiToken.transfer(msg.sender, rewardAmount);
 
         // emit PromptResponse(promptNumber, responseIndex, msg.sender);
