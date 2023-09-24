@@ -1,17 +1,60 @@
+import os
 import json
 import time
 import logging
 from typing import Optional, Dict, List, Union
+
 
 import pandas as pd
 
 from subgrounds.pagination import ShallowStrategy
 from subgrounds import Subgrounds, Subgraph, SyntheticField
 
+from web3 import Web3
+
+from dotenv import load_dotenv
+load_dotenv()  
+
 logger = logging.getLogger(__name__)
 
 # Stop subgrounds from logging kak
 logging.getLogger("subgrounds").setLevel(logging.WARNING)
+
+POLYGON_MUMBAI = os.environ.get('POLYGON_MUMBAI')
+DEV_WALLET = os.environ.get("DEV_WALLET")
+DEV_KEY = os.environ.get("DEV_KEY")
+
+class Execute:
+
+    def __init__(
+            self,
+            POLYGON_MUMBAI, 
+            DEV_WALLET, 
+            DEV_KEY
+        ) -> None:
+        w3 = Web3(Web3.HTTPProvider(POLYGON_MUMBAI))
+        self.w3 = w3
+        self.wallet = w3.to_checksum_address(DEV_WALLET)
+        self.key = DEV_KEY
+
+        with open('PromptMarketContract.json') as f:
+            contract_json = json.load(f)
+
+        addy = self.w3.to_checksum_address('0x76cb33a84cb5cae9283c9cafe6a24a457ee812f4')
+
+        self.contract = w3.eth.contract(address=addy, abi=contract_json)
+
+    def send_inference(self, prompt_id, text_one, text_two): 
+
+        txn_nonce = self.w3.eth.get_transaction_count(DEV_WALLET)
+        gas_price = self.w3.eth.gas_price
+        gas=3000000
+        txn = {'chainId': 80001, 'gas' : gas, 'gasPrice': gas_price, 'nonce': txn_nonce}
+
+        inference = self.contract.functions.createInference(prompt_id, text_one, text_two).build_transaction(txn)
+        signed_inference = self.w3.eth.account.sign_transaction(inference, DEV_KEY)
+        sent_inference = self.w3.eth.send_raw_transaction(signed_inference.rawTransaction)
+        self.w3.eth.wait_for_transaction_receipt(sent_inference)
 
 class TrainData: 
 
@@ -75,6 +118,7 @@ def __main__():
 
     subgraph = 'https://api.thegraph.com/subgraphs/name/denverbaumgartner/teachai'
     td = TrainData(url=subgraph)
+    ex = Execute()
 
     # collect the data 
     td.data = td.get_prompts()
@@ -96,7 +140,30 @@ def __main__():
         # if there are new prompts, send them to the model
         if len(new_prompts) > 0: 
             print(new_prompts)
+
+            prompt_ids = [int(x, 16) for x in new_prompts['prompts_id'].tolist()]
+            prompt_text = new_prompts['prompts_text'].tolist()
+            for i in range(len(prompt_text)):
+                
+                current_id = prompt_ids[i]
+                current_text = prompt_text[i]
+
+                print(prompt_ids[i])
+                print(prompt_text[i])
+
+                # send to model
+                
+                # get response
+        
+                # post the response to chain 
+
             td.data = pd.concat([td.data, new_data]).drop_duplicates(keep=False).reset_index(drop=True)
+
+            
+
+
+
+
 
 
 if __name__ == '__main__':

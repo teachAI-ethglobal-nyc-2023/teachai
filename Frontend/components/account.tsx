@@ -32,6 +32,8 @@ import {
   PopoverTrigger,
 } from  "@/components/ui/popover"
 import { toast } from "@/components/ui/use-toast"
+import { WorldCoinConnect } from "./world-coin-connect"
+import LoadFiat from "./load-fiat"
 
 const languages = [
   { label: "English", value: "en" },
@@ -88,6 +90,10 @@ export function AccountForm() {
   }
 
   return (
+    <>
+    <WorldCoinConnect />
+    <LoadFiat />
+    
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
@@ -215,5 +221,6 @@ export function AccountForm() {
         <Button type="submit">Update account</Button>
       </form>
     </Form>
+    </>
   )
 }

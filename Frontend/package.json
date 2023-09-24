@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.4",
+    "@biconomy/transak": "^3.1.0",
     "@hookform/resolvers": "^3.3.1",
+    "@particle-network/rainbowkit-ext": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.0.4",
     "@radix-ui/react-avatar": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.4",
@@ -30,6 +32,7 @@
     "@types/node": "20.6.3",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
+    "@worldcoin/idkit": "^0.5.1",
     "autoprefixer": "10.4.16",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
