@@ -14,6 +14,16 @@ import { Label } from '@radix-ui/react-dropdown-menu';
 import { ChatScrollAnchor } from '@/components/chat-scroll-anchor';
 import { Button } from '@/components/ui/button';
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Car } from 'lucide-react';
+
 interface promptQuestions {
   message: string;
   id?: number;
@@ -66,27 +76,33 @@ export default function Home() {
         )}
 
         {promptQuestions.map((promptQuestion, index) => (
-          <div key={index} className='my-4'>
-              <Label>You said: {promptQuestion.message}</Label>
-              <div>
-                <Label>System response: {promptQuestion.option1}</Label>
-                { (!promptQuestion.optionResponse) && (
-                  <Button onClick={ () => updatePromptResponse(index, 1)}>Select</Button>
-                )
-                }
-              </div>
-              <div>
-                <Label>System response: {promptQuestion.option2}</Label>
-                { (!promptQuestion.optionResponse) && (
-                  <Button onClick={ () => updatePromptResponse(index, 2)}>Select</Button>
+          <Card key={index} className='mx-16 px-4 my-4 py-4'>
+            <CardHeader>
+              <CardTitle>You said: {promptQuestion.message}</CardTitle>
+            </CardHeader>
+            <CardContent>
+
+                <Card className='flex justify-between py-4 my-4 mx-4 px-4'>
+                  <Label>System response: {promptQuestion.option1}</Label>
+                  { (!promptQuestion.optionResponse) && (
+                    <Button onClick={ () => updatePromptResponse(index, 1)}>Select</Button>
                   )
-                }
-              </div>
-              { (promptQuestion.optionResponse) && (
-                <Label>System response: {promptQuestion.optionResponse}</Label>
-              )}
-              
-          </div>
+                  }
+                </Card>
+                <Card className='flex justify-between py-4 my-4 mx-4 px-4'>
+                  <Label>System response: {promptQuestion.option2}</Label>
+                  { (!promptQuestion.optionResponse) && (
+                    <Button onClick={ () => updatePromptResponse(index, 2)}>Select</Button>
+                    )
+                  }
+                </Card>
+            </CardContent>
+            { (promptQuestion.optionResponse) && (
+              <CardFooter>
+                <CardTitle className="text-lg">System response: {(promptQuestion.optionResponse == 1) ? promptQuestion.option1 : promptQuestion.option2}</CardTitle>
+              </CardFooter>
+            )}
+          </Card>
         ))}
         <ChatScrollAnchor trackVisibility={true} />
 
