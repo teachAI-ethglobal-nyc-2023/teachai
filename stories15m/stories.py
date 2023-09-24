@@ -22,7 +22,8 @@ logger = logging.getLogger(__name__)
 rollup_server = environ["ROLLUP_HTTP_SERVER_URL"]
 logger.info(f"HTTP rollup_server url is {rollup_server}")
 
-FORTUNE_CMD = "./run stories15M.bin -t 0.8 -n 100 -i 'One day, Lily met a Shoggoth'; exit 0"
+FORTUNE_CMD_head = "./run stories15M.bin -t 0.8 -n 100 -i '"
+FORTUNE_CMD_tail = "'; exit 0"
 
 def hex2str(hex):
     """
@@ -42,6 +43,7 @@ def handle_advance(data):
     status = "accept"
     try:
         input = hex2str(data["payload"])
+        FORTUNE_CMD = FORTUNE_CMD_head + input + FORTUNE_CMD_tail
         logger.info(f"Received input: {input}")
 
         quote = subprocess.check_output(FORTUNE_CMD, shell=True, stderr=subprocess.STDOUT).decode()
@@ -67,6 +69,7 @@ def handle_inspect(data):
     status = "accept"
     try:
         input = hex2str(data["payload"])
+        FORTUNE_CMD = FORTUNE_CMD_head + input + FORTUNE_CMD_tail
         logger.info(f"Received input: {input}")
 
         output = subprocess.check_output(FORTUNE_CMD, shell=True, stderr=subprocess.STDOUT).decode()
