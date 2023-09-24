@@ -116,5 +116,16 @@ type Feedback @entity(immutable: true) {
     isOneBetter: Boolean!
 }
 
-
+type CID @entity {
+    " the cid hash "
+    id: ID!
+    " the transaction entity "
+    transaction: Transaction!
+    " the event index "
+    eventIndex: BigInt!
+    " the user that promoted the cid "
+    user: User!
+    " the data within the ipfs bucket "
+    data: String
+}
 
