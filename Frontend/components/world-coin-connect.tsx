@@ -18,7 +18,7 @@ export function WorldCoinConnect() {
   }
 
   return (
-    <div className="m-10">
+    <div className="my-5">
 
       {isVerified && (
         <h2>User is World ID Verified</h2>
