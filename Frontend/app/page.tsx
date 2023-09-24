@@ -29,7 +29,6 @@ import { mainnet, polygonMumbai } from 'viem/chains'
 import { wagmiAbi } from '../abi/abi'
 import { useContractEvent } from 'wagmi'
 
-// import { ContractTransaction } from 'ethers';
 
 interface promptQuestions {
   message: string;
@@ -43,7 +42,9 @@ interface promptQuestions {
 export default function Home() {
 
   const [existPreviousMessage, setExistPreviousMessage] = React.useState(false);
-  const  [promptQuestions, setPromptQuestions] = useState<promptQuestions[]>([]);
+  const [promptQuestions, setPromptQuestions] = useState<promptQuestions[]>([]);
+  var targetTransactionHash = "";
+  let promptNumber: bigint;
 
   const walletClient = createWalletClient({
     chain: polygonMumbai,
@@ -52,37 +53,46 @@ export default function Home() {
 
   const updateValueInParent = async (prompt: string) => {
 
-    // set the message
-    const newPrompt : promptQuestions= {
-      message: prompt,
-    };
-    setPromptQuestions([...promptQuestions, newPrompt]);
-
-    // system add options to response
-    newPrompt.option1 = prompt + " - Option 1";
-    newPrompt.option2 = prompt + " - Option 2";
-
     const [account] = await walletClient.getAddresses();
 
     await walletClient.writeContract({
-      address: '0xD5cFA2271467e49059CdACF37622d3b76C64199D',
+      address: process.env.NEXT_PUBLIC_MUMBAI_CONTRACT_ADDRESS  as `0x${string}`,
       abi: wagmiAbi,
       functionName: 'setPrompt',
       args: [prompt],
       account: account,
       chain: polygonMumbai
     }).then((result) => {
-      console.log(result);
+      targetTransactionHash = result.toString();
     }).catch((error) => {
       console.log(error);
     });
 
   };
 
-  const updatePromptResponse = (index: number, option: number) => {
+  const updatePromptResponse = async (index: number, option: number) => {
     const newPrompt = promptQuestions[index];
     newPrompt.optionResponse = option;
     setPromptQuestions([...promptQuestions]);
+
+    const [account] = await walletClient.getAddresses();
+
+    await walletClient.writeContract({
+      address: process.env.NEXT_PUBLIC_MUMBAI_CONTRACT_ADDRESS  as `0x${string}`,
+      abi: wagmiAbi,
+      functionName: 'respondToPromptOptions',
+      args: [option],
+      account: account,
+      chain: polygonMumbai
+    }).then((result) => {
+      console.log(result);
+      var txStr = result.toString();
+      console.log(txStr);
+      targetTransactionHash = txStr;
+    }).catch((error) => {
+      console.log(error);
+    });    
+
   };
 
   useContractEvent({
@@ -92,6 +102,27 @@ export default function Home() {
     listener(log) {
       console.log('here is where we are pulling in the logs for the logPrompt event')
       console.log(log)
+      console.log(targetTransactionHash);
+
+      const foundObject = log.find((element) => element.transactionHash == targetTransactionHash);
+
+      if (foundObject) {
+        console.log("Found object:", foundObject);
+      // *************
+
+      // set the message
+      const newPrompt : promptQuestions= {
+        message: foundObject.args.question || '',
+      };
+      setPromptQuestions([...promptQuestions, newPrompt]);
+
+      // system add options to response
+      newPrompt.option1 = foundObject.args.option1;
+      newPrompt.option2 = foundObject.args.option2;
+      // *************
+
+      }
+
     },
   })
 
