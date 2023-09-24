@@ -3,7 +3,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
-import { useAccount } from "wagmi";
+import { useAccount, usePrepareContractWrite } from "wagmi";
 import { useState, useEffect } from "react";
 
 import { PromptForm } from '@/components/prompt-form'
@@ -22,7 +22,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Car } from 'lucide-react';
+
+import { createPublicClient, createWalletClient, custom, http } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
+import { mainnet, polygonMumbai } from 'viem/chains'
+import { wagmiAbi } from '../abi/abi'
 
 interface promptQuestions {
   message: string;
@@ -38,18 +42,37 @@ export default function Home() {
   const [existPreviousMessage, setExistPreviousMessage] = React.useState(false);
   const  [promptQuestions, setPromptQuestions] = useState<promptQuestions[]>([]);
 
-  const updateValueInParent = (prompt: string) => {
+  const walletClient = createWalletClient({
+    chain: polygonMumbai,
+    transport: custom(window.ethereum)
+  })
+
+  const updateValueInParent = async (prompt: string) => {
 
     // set the message
     const newPrompt : promptQuestions= {
       message: prompt,
     };
     setPromptQuestions([...promptQuestions, newPrompt]);
-    const index = promptQuestions.length - 1;
 
-    // system add otions to response
+    // system add options to response
     newPrompt.option1 = prompt + " - Option 1";
     newPrompt.option2 = prompt + " - Option 2";
+
+    const [account] = await walletClient.getAddresses();
+
+    await walletClient.writeContract({
+      address: '0xD5cFA2271467e49059CdACF37622d3b76C64199D',
+      abi: wagmiAbi,
+      functionName: 'setPrompt',
+      args: [prompt],
+      account: account,
+      chain: polygonMumbai
+    }).then((result) => {
+      console.log(result);
+    }).catch((error) => {
+      console.log(error);
+    });
 
   };
 
@@ -58,7 +81,7 @@ export default function Home() {
     newPrompt.optionResponse = option;
     setPromptQuestions([...promptQuestions]);
   };
-  
+
   return (
     <div>
       <Head>
