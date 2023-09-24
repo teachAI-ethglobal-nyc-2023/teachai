@@ -43,7 +43,8 @@ init({
 
 const App: FC = () => {
     return (
-        <div>
+        <div className="my-8">
+            <Label className="m-8 text-3xl font-bold">TeachAI Dashboard</Label>
             <Network />
             <GraphQLProvider>
                 <Label className="ml-8 text-2xl">Inspect</Label>
