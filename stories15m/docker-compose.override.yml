@@ -3,3 +3,18 @@ version: "3"
 services:
   server_manager:
     image: ${DAPP_IMAGE:-cartesi/dapp:stories-devel-server}
+    ports:
+      - "8080:8080"  # Map host port 8080 to container port 8080 (for example)
+      
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"  # Map host port 5432 to container port 5432 (for example)
+      
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"  # Map host port 6379 to container port 6379 (for example)
