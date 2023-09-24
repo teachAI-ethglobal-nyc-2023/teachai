@@ -12,6 +12,7 @@ import EmptyScreen  from '@/components/empty-screen';
 import React from 'react';
 import { Label } from '@radix-ui/react-dropdown-menu';
 import { ChatScrollAnchor } from '@/components/chat-scroll-anchor';
+import { Button } from '@/components/ui/button';
 
 interface promptQuestions {
   message: string;
@@ -41,6 +42,12 @@ export default function Home() {
     newPrompt.option2 = prompt + " - Option 2";
 
   };
+
+  const updatePromptResponse = (index: number, option: number) => {
+    const newPrompt = promptQuestions[index];
+    newPrompt.optionResponse = option;
+    setPromptQuestions([...promptQuestions]);
+  };
   
   return (
     <div>
@@ -59,10 +66,26 @@ export default function Home() {
         )}
 
         {promptQuestions.map((promptQuestion, index) => (
-          <div key={index}>
+          <div key={index} className='my-4'>
               <Label>You said: {promptQuestion.message}</Label>
-              <Label>System response: {promptQuestion.option1}</Label>
-              <Label>System response: {promptQuestion.option2}</Label>
+              <div>
+                <Label>System response: {promptQuestion.option1}</Label>
+                { (!promptQuestion.optionResponse) && (
+                  <Button onClick={ () => updatePromptResponse(index, 1)}>Select</Button>
+                )
+                }
+              </div>
+              <div>
+                <Label>System response: {promptQuestion.option2}</Label>
+                { (!promptQuestion.optionResponse) && (
+                  <Button onClick={ () => updatePromptResponse(index, 2)}>Select</Button>
+                  )
+                }
+              </div>
+              { (promptQuestion.optionResponse) && (
+                <Label>System response: {promptQuestion.optionResponse}</Label>
+              )}
+              
           </div>
         ))}
         <ChatScrollAnchor trackVisibility={true} />
