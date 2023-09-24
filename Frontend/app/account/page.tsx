@@ -6,6 +6,7 @@ import Head from 'next/head';
 
 import { useAccount } from "wagmi";
 import { useState, useEffect } from "react";
+import { AccountForm } from '@/components/account';
 
 
 const Account: NextPage = () => {
@@ -30,7 +31,9 @@ const Account: NextPage = () => {
 
       <main>
 
-        <h1>Account</h1>
+      <div className="space-y-6 my-8 mx-16">
+        <AccountForm />
+      </div>
         
       </main>
 

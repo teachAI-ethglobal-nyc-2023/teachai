@@ -31,15 +31,12 @@ import { alchemyProvider } from 'wagmi/providers/alchemy'
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
+    goerli,
     polygon,
     polygonMumbai,
-    filecoin,
-    filecoinCalibration,
     arbitrum,
     arbitrumGoerli,
     arbitrumNova,
-    base,
-    baseGoerli,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [goerli] : []),
   ],
   [ alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || ''}),
