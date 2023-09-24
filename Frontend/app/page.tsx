@@ -108,9 +108,6 @@ export default function Home() {
 
   const updatePromptResponse = async (index: number, option: number) => {
 
-
-
-
     const newPrompt = promptQuestions[index];
     newPrompt.optionResponse = option;
     setPromptQuestions([...promptQuestions]);
