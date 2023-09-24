@@ -56,7 +56,7 @@ export const Network: FC = () => {
                     {settingChain ? (
                         <span>Switching chain...</span>
                     ) : (
-                        <select className='mx-4 border-solid bg-slate-200 p-1'
+                        <select className='mx-4 border-solid bg-slate-200 p-1 rounded-md'
                             onChange={({ target: { value } }) => {
                                 if (config[value] !== undefined) {
                                     setChain({ chainId: value })
